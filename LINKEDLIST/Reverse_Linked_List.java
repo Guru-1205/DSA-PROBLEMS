@@ -2,55 +2,85 @@
  * LeetCode 206: Reverse Linked List
  *
  * <p>
- * <b>Problem:</b><br>
- * Given the head of a singly linked list, reverse the list and return the new
- * head.
+ * <b>Problem Description:</b><br>
+ * Given the {@code head} of a singly linked list, reverse the list and return
+ * the new head.
  *
  * <p>
- * <b>Constraints:</b><br>
- * - Length of list: [0, 5000].<br>
- * - Node values: [-5000, 5000].<br>
+ * <b>Sample Input / Output:</b>
+ *
+ * <pre>{@code
+ * Example 1:
+ * Input:  head = [1,2,3,4,5]
+ * Output: [5,4,3,2,1]
+ *
+ * Example 2:
+ * Input:  head = []
+ * Output: []
+ * }</pre>
  *
  * <p>
- * <b>Example:</b><br>
- * Input: head = [1,2,3,4,5]<br>
- * Output: [5,4,3,2,1]<br>
- * <br>
+ * <b>Constraints:</b>
+ * <ul>
+ * <li>The number of nodes in the list is in the range [0, 5000].</li>
+ * <li>-5000 <= Node.val <= 5000</li>
+ * </ul>
  *
- * Input: head = []<br>
- * Output: []<br>
+ * -----------------------------------------------------------------------
  */
-class Solution {
+public class Reverse_Linked_List {
 
     /**
-     * -------------------------------------------------
-     * Approach 1: Using ArrayList (Extra Space)
-     * -------------------------------------------------
+     * Reverses a linked list using an ArrayList to store values and rebuild a
+     * new reversed list.
      *
-     * @implNote
-     *           <b>Step 1:</b> Traverse the list and collect all values into an
-     *           ArrayList.
-     *           - Example: [1,2,3,4,5] → [1,2,3,4,5].<br>
+     * <p>
+     * <b>Approach 1: ArrayList-Based (Extra Space)</b>
      *
-     *           <b>Step 2:</b> Build a new linked list in reverse order.
-     *           - Iterate ArrayList from last to first.<br>
-     *           - Example: [1,2,3,4,5] → new list [5,4,3,2,1].<br>
+     * <p>
+     * <b>Detailed Steps:</b>
+     * <ol>
+     * <li><b>Traverse and collect values:</b>
+     * <ul>
+     * <li>Create an {@code ArrayList<Integer>}.</li>
+     * <li>Traverse the linked list and add each node value into the list.</li>
+     * <li>Example: [1,2,3,4,5] → ArrayList = [1,2,3,4,5].</li>
+     * </ul>
+     * </li>
      *
-     *           <b>Step 3:</b> Return the new head.
-     *           - If input list is empty, return null.<br>
+     * <li><b>Rebuild in reverse order:</b>
+     * <ul>
+     * <li>Iterate ArrayList from last index to first.</li>
+     * <li>Create new nodes with these values and link them.</li>
+     * <li>Example: [1,2,3,4,5] → new list [5,4,3,2,1].</li>
+     * </ul>
+     * </li>
      *
-     * @param head head of original list
-     * @return head of reversed list
+     * <li><b>Return new head:</b>
+     * <ul>
+     * <li>If input is empty, return null.</li>
+     * </ul>
+     * </li>
+     * </ol>
+     *
+     * <p>
+     * <b>Complexity:</b>
+     * <ul>
+     * <li>Time: O(n) — traverse list + rebuild list.</li>
+     * <li>Space: O(n) — extra ArrayList and new nodes.</li>
+     * </ul>
      */
     public ListNode reverseListArrayList(ListNode head) {
         java.util.ArrayList<Integer> values = new java.util.ArrayList<>();
         ListNode curr = head;
 
+        // Collect values
         while (curr != null) {
             values.add(curr.val);
             curr = curr.next;
         }
 
+        // Rebuild reversed list
         ListNode dummy = new ListNode(0);
         curr = dummy;
 
@@ -63,31 +93,47 @@ class Solution {
     }
 
     /**
-     * -------------------------------------------------
-     * Approach 2: Three-Pointer Efficient In-Place
-     * -------------------------------------------------
+     * Reverses a linked list in-place using three pointers.
      *
-     * @implNote
-     *           <b>Step 1:</b> Initialize three pointers:
-     *           - prev = null (to become new tail).
-     *           - curr = head (to traverse the list).
-     *           - next = null (to temporarily hold next node).<br>
-     *           <br>
+     * <p>
+     * <b>Approach 2: Efficient Three-Pointer In-Place</b>
      *
-     *           <b>Step 2:</b> Traverse the list and reverse pointers one by one.
-     *           - Save curr.next into next.<br>
-     *           - Redirect curr.next to prev.<br>
-     *           - Move prev to curr.<br>
-     *           - Move curr to next.<br>
-     *           - Example iteration: [1 → 2 → 3]
-     *           - After first iteration: prev=1 → null, curr=2.<br>
-     *           - After second iteration: prev=2 → 1 → null, curr=3.<br>
+     * <p>
+     * <b>Detailed Steps:</b>
+     * <ol>
+     * <li><b>Initialize pointers:</b>
+     * <ul>
+     * <li>{@code prev = null} → will become new tail.</li>
+     * <li>{@code curr = head} → used to traverse list.</li>
+     * </ul>
+     * </li>
      *
-     *           <b>Step 3:</b> When curr reaches null, prev points to the new head.
-     *           - Return prev as the new head of reversed list.<br>
+     * <li><b>Iterate and reverse links:</b>
+     * <ul>
+     * <li>Save next node: {@code next = curr.next}.</li>
+     * <li>Reverse link: {@code curr.next = prev}.</li>
+     * <li>Advance pointers: {@code prev = curr}, {@code curr = next}.</li>
+     * <li>Example with [1 → 2 → 3]:</li>
+     * <ul>
+     * <li>After first iteration: prev = 1 → null, curr = 2.</li>
+     * <li>After second iteration: prev = 2 → 1 → null, curr = 3.</li>
+     * </ul>
+     * </ul>
+     * </li>
      *
-     * @param head head of original list
-     * @return head of reversed list
+     * <li><b>Finish:</b>
+     * <ul>
+     * <li>When curr becomes null, prev is the new head.</li>
+     * </ul>
+     * </li>
+     * </ol>
+     *
+     * <p>
+     * <b>Complexity:</b>
+     * <ul>
+     * <li>Time: O(n) — single traversal.</li>
+     * <li>Space: O(1) — in-place, no extra memory.</li>
+     * </ul>
      */
     public ListNode reverseListThreePointers(ListNode head) {
         ListNode prev = null;
@@ -96,29 +142,18 @@ class Solution {
         while (curr != null) {
             ListNode nextNode = curr.next; // save next
             curr.next = prev; // reverse link
-            prev = curr; // move prev forward
-            curr = nextNode; // move curr forward
+            prev = curr; // move prev
+            curr = nextNode; // move curr
         }
 
         return prev;
     }
-}
 
-/**
- * -------------------------------------------------
- * Time and Space Complexity Analysis
- * -------------------------------------------------
- *
- * Approach 1: ArrayList
- * - Time: O(n) → Traverse list once to collect, once to rebuild.
- * - Space: O(n) → Extra ArrayList + new list nodes.
- *
- * Approach 2: Three Pointers
- * - Time: O(n) → Traverse list once.
- * - Space: O(1) → In-place reversal using only pointers.
- *
- * Comparison:
- * - Both O(n) time.
- * - ArrayList wastes O(n) extra space.
- * - Three-pointer method is optimal with O(1) space.
- */
+    /**
+     * -----------------------------------------------------------------------
+     * <b>Recommendation:</b>
+     * Approach 1 (ArrayList) is intuitive but inefficient — O(n) space.
+     * Approach 2 (Three Pointers) is the optimal solution with O(1) space.
+     * -----------------------------------------------------------------------
+     */
+}

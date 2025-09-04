@@ -2,158 +2,177 @@
  * LeetCode 92: Reverse Linked List II
  *
  * <p>
- * <b>Problem:</b><br>
- * Given the head of a singly linked list and two integers left and right where
- * left <= right,
- * reverse the nodes of the list from position left to right, and return the
- * reversed list.
+ * <b>Problem Description:</b><br>
+ * Given the {@code head} of a singly linked list and two integers {@code left}
+ * and {@code right} where {@code left <= right}, reverse the nodes of the list
+ * from position {@code left} to position {@code right}, and return the reversed
+ * list.
  *
  * <p>
- * <b>Constraints:</b><br>
- * - Length of list: [1, 500].<br>
- * - Node values: [-500, 500].<br>
- * - 1 <= left <= right <= list length.<br>
+ * <b>Sample Input / Output:</b>
+ *
+ * <pre>{@code
+ * Example 1:
+ * Input:  head = [1,2,3,4,5], left = 2, right = 4
+ * Output: [1,4,3,2,5]
+ *
+ * Example 2:
+ * Input:  head = [5], left = 1, right = 1
+ * Output: [5]
+ * }</pre>
  *
  * <p>
- * <b>Example:</b><br>
- * Input: head = [1,2,3,4,5], left = 2, right = 4<br>
- * Output: [1,4,3,2,5]<br>
+ * <b>Constraints:</b>
+ * <ul>
+ * <li>The number of nodes in the list is {@code n}.</li>
+ * <li>1 <= n <= 500</li>
+ * <li>-500 <= Node.val <= 500</li>
+ * <li>1 <= left <= right <= n</li>
+ * </ul>
+ *
+ * -----------------------------------------------------------------------
  */
-class Solution {
+public class Reverse_Linked_List_II {
 
     /**
-     * -------------------------------------------------
-     * Approach 1: Using ArrayList (Extra Space)
-     * -------------------------------------------------
+     * Reverses the sublist between left and right using an ArrayList to store
+     * references.
      *
-     * @implNote
-     *           <b>Step 1:</b> Traverse the linked list and collect all values into
-     *           an ArrayList.
-     *           Example: [1,2,3,4,5] → [1,2,3,4,5].<br>
-     *           <br>
+     * <p>
+     * <b>Approach 1: ArrayList-Based (Simple but Less Efficient)</b>
      *
-     *           <b>Step 2:</b> Reverse the sublist values from index (left-1) to
-     *           (right-1).
-     *           Example: [1,2,3,4,5], left=2, right=4 → [1,4,3,2,5].<br>
-     *           <br>
+     * <p>
+     * <b>Detailed Steps:</b>
+     * <ol>
+     * <li><b>Store all nodes in a list:</b>
+     * <ul>
+     * <li>Create {@code List<ListNode>} and traverse the linked list.</li>
+     * <li>Add each node to the ArrayList (preserving order).</li>
+     * </ul>
+     * </li>
      *
-     *           <b>Step 3:</b> Rebuild a new linked list from the modified
-     *           ArrayList.
-     *           Return the new head.<br>
+     * <li><b>Reverse values between left and right:</b>
+     * <ul>
+     * <li>Indices are {@code left-1} to {@code right-1} (0-based).</li>
+     * <li>Use two-pointer technique on the ArrayList → swap values in place.</li>
+     * </ul>
+     * </li>
      *
-     * @param head  original list head
-     * @param left  start position of reversal
-     * @param right end position of reversal
-     * @return new head of modified list
+     * <li><b>Reconstruct list:</b>
+     * <ul>
+     * <li>Since only values are swapped, no structural re-linking needed.</li>
+     * <li>Return original head.</li>
+     * </ul>
+     * </li>
+     * </ol>
+     *
+     * <p>
+     * <b>Complexity:</b>
+     * <ul>
+     * <li>Time: O(n) — traversal + reversal inside ArrayList.</li>
+     * <li>Space: O(n) — stores all nodes in ArrayList.</li>
+     * </ul>
      */
     public ListNode reverseBetweenArrayList(ListNode head, int left, int right) {
-        java.util.ArrayList<Integer> values = new java.util.ArrayList<>();
+        if (head == null || left == right)
+            return head;
+
+        java.util.List<ListNode> list = new java.util.ArrayList<>();
         ListNode curr = head;
 
+        // Store nodes in ArrayList
         while (curr != null) {
-            values.add(curr.val);
+            list.add(curr);
             curr = curr.next;
         }
 
+        // Swap values between left and right
         int i = left - 1, j = right - 1;
         while (i < j) {
-            int temp = values.get(i);
-            values.set(i, values.get(j));
-            values.set(j, temp);
+            int temp = list.get(i).val;
+            list.get(i).val = list.get(j).val;
+            list.get(j).val = temp;
             i++;
             j--;
         }
 
-        ListNode dummy = new ListNode(0);
-        curr = dummy;
-        for (int val : values) {
-            curr.next = new ListNode(val);
-            curr = curr.next;
-        }
-
-        return dummy.next;
+        return head;
     }
 
     /**
-     * -------------------------------------------------
-     * Approach 2: Efficient In-Place Reversal
-     * -------------------------------------------------
+     * Efficient in-place reversal of a sublist between left and right.
      *
-     * @implNote
-     *           <b>Step 1:</b> Use a dummy node to handle edge cases when left=1.
-     *           - Traverse until the node just before `left` (call this `prev`).
-     *           - Example: for left=2, `prev` points to node with value 1.<br>
-     *           <br>
+     * <p>
+     * <b>Approach 2: In-Place Reversal (Efficient)</b>
      *
-     *           <b>Step 2:</b> Reverse the sublist from `left` to `right`.
-     *           - Keep track of current (`curr`), next, and prev pointers.
-     *           - Iteratively reverse `right-left+1` nodes.<br>
-     *           - Example: [1,2,3,4,5], left=2, right=4 → reversed sublist
-     *           [4,3,2].<br>
-     *           <br>
+     * <p>
+     * <b>Detailed Steps:</b>
+     * <ol>
+     * <li><b>Initialize dummy node:</b>
+     * <ul>
+     * <li>Create {@code dummy = new ListNode(0, head)}.</li>
+     * <li>Use pointer {@code prev} to reach the node before {@code left}.</li>
+     * </ul>
+     * </li>
      *
-     *           <b>Step 3:</b> Reconnect the reversed sublist with the remaining
-     *           nodes.
-     *           - `prev.next.next` should point to the node after `right`.
-     *           - `prev.next` should point to the head of the reversed sublist.<br>
-     *           <br>
+     * <li><b>Identify sublist:</b>
+     * <ul>
+     * <li>{@code curr = prev.next} → first node in sublist.</li>
+     * </ul>
+     * </li>
      *
-     *           <b>Step 4:</b> Return dummy.next as the new head.
+     * <li><b>Reverse sublist by shifting nodes:</b>
+     * <ul>
+     * <li>Repeat {@code right - left} times:</li>
+     * <li>Take out node after {@code curr} → {@code next = curr.next}.</li>
+     * <li>Detach {@code next} and insert it right after {@code prev}.</li>
+     * <li>Reconnect pointers accordingly.</li>
+     * </ul>
+     * </li>
      *
-     * @param head  original list head
-     * @param left  start position of reversal
-     * @param right end position of reversal
-     * @return new head of modified list
+     * <li><b>Reconnect list:</b>
+     * <ul>
+     * <li>Dummy ensures even if left=1, logic works seamlessly.</li>
+     * </ul>
+     * </li>
+     * </ol>
+     *
+     * <p>
+     * <b>Complexity:</b>
+     * <ul>
+     * <li>Time: O(n) — single traversal, localized reversal.</li>
+     * <li>Space: O(1) — in-place operations only.</li>
+     * </ul>
      */
     public ListNode reverseBetweenEfficient(ListNode head, int left, int right) {
         if (head == null || left == right)
             return head;
 
-        ListNode dummy = new ListNode(0);
-        dummy.next = head;
+        ListNode dummy = new ListNode(0, head);
         ListNode prev = dummy;
 
-        // Step 1: Move prev to the node before left
+        // Step 1: move prev to node before left
         for (int i = 1; i < left; i++) {
             prev = prev.next;
         }
 
-        // Step 2: Reverse sublist
+        // Step 2: start reversing
         ListNode curr = prev.next;
-        ListNode next;
-        ListNode sublistPrev = null;
-
-        for (int i = 0; i <= right - left; i++) {
-            next = curr.next;
-            curr.next = sublistPrev;
-            sublistPrev = curr;
-            curr = next;
+        for (int i = 0; i < right - left; i++) {
+            ListNode next = curr.next;
+            curr.next = next.next;
+            next.next = prev.next;
+            prev.next = next;
         }
-
-        // Step 3: Connect parts
-        ListNode sublistHead = prev.next;
-        prev.next = sublistPrev;
-        sublistHead.next = curr;
 
         return dummy.next;
     }
-}
 
-/**
- * -------------------------------------------------
- * Time and Space Complexity Analysis
- * -------------------------------------------------
- *
- * Approach 1: ArrayList
- * - Time: O(n) → Traverse list once + rebuild once.
- * - Space: O(n) → Extra ArrayList + new nodes.
- *
- * Approach 2: Efficient In-Place
- * - Time: O(n) → One pass for locating `left` + one pass reversing sublist.
- * - Space: O(1) → Constant extra pointers.
- *
- * Comparison:
- * - Both O(n) time.
- * - ArrayList wastes O(n) space.
- * - In-place pointer reversal is optimal with O(1) space.
- */
+    /**
+     * -----------------------------------------------------------------------
+     * <b>Recommendation:</b>
+     * Approach 1 (ArrayList) is simple to implement but uses extra memory.
+     * Approach 2 (In-place) is the optimal interview-ready solution.
+     * -----------------------------------------------------------------------
+     */
+}

@@ -25,7 +25,7 @@ interface ImmutableListNode {
     public ImmutableListNode getNext(); // return the next node
 }
 
-class Solution {
+public class Print_Immutable_Linked_List_In_Reverse {
 
     /**
      * -------------------------------------------------
@@ -34,19 +34,16 @@ class Solution {
      *
      * @implNote
      *           <b>Step 1:</b> Traverse the immutable linked list and collect all
-     *           values
-     *           into an ArrayList.<br>
+     *           nodes into an ArrayList.<br>
      *           Example: [1,2,3,4] → ArrayList [1,2,3,4].<br>
-     *           <br>
      *
      *           <b>Step 2:</b> Iterate over the ArrayList in reverse order and
      *           print values.<br>
      *           Example: ArrayList [1,2,3,4] → print 4,3,2,1.<br>
-     *           <br>
      *
-     *           <b>Why it works:</b> We cannot modify the linked list, but we can
-     *           store values
-     *           externally and then access them in reverse.<br>
+     *           <b>Why it works:</b> Since we cannot modify the list due to
+     *           immutability,
+     *           we store nodes externally and then print them in reverse order.<br>
      *
      * @param head immutable list head
      */
@@ -80,5 +77,5 @@ class Solution {
  *
  * Comparison:
  * - Works under immutability constraint.
- * - Uses extra memory O(n), but simplest and safe.
+ * - Uses extra memory O(n), but is the simplest and safest solution.
  */

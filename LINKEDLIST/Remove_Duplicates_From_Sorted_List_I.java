@@ -15,7 +15,7 @@ import java.util.Map;
  * Input: head = [1,2,3,3,4,4,5]<br>
  * Output: [1,2,5]
  */
-class Solution {
+public class Remove_Duplicates_From_Sorted_List_I {
 
     /**
      * -------------------------------------------------

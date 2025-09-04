@@ -2,55 +2,58 @@
  * LeetCode 237: Delete Node in a Linked List
  *
  * <p>
- * <b>Problem:</b><br>
+ * <b>Problem Description:</b><br>
  * Write a function to delete a node (except the tail) in a singly linked list,
  * given only access to that node.
  *
  * <p>
  * <b>Key Restriction:</b><br>
  * - We are not given access to the head of the list.<br>
- * - We only receive the node to delete.<br>
- * - It is guaranteed that the node to be deleted is not the last node.<br>
+ * - Only the node to delete is provided.<br>
+ * - Guaranteed: the node to be deleted is not the last node.<br>
  *
  * <p>
- * <b>Example:</b><br>
+ * Example:<br>
  * Input: head = [4,5,1,9], node = 5<br>
- * Output: [4,1,9]
+ * Output: [4,1,9]<br>
  */
-class Solution {
+public class Delete_Node_In_Linked_List {
 
     /**
      * -------------------------------------------------
      * Approach: Copy Next Node's Data and Skip It
      * -------------------------------------------------
      *
-     * @implNote
-     *           <b>Step 1: Copy value from the next node</b><br>
-     *           - Take node.next.val and assign it to node.val.<br>
-     *           - Example: node=5, node.next=1 → overwrite node.val=1.<br>
-     *           <br>
+     * <b>Step 1: Identify the limitation</b><br>
+     * - In normal deletion, we need the previous node to change its "next"
+     * pointer.<br>
+     * - Here, we don’t have access to the head or previous node, so we cannot
+     * perform the standard deletion.<br>
+     * <br>
      *
-     *           <b>Step 2: Skip the next node</b><br>
-     *           - Set node.next = node.next.next.<br>
-     *           - This effectively removes the next node (duplicate value).<br>
-     *           - Example: list before: [4,5,1,9], after modification: [4,1,9].<br>
-     *           <br>
+     * <b>Step 2: Overwrite current node’s value</b><br>
+     * - Copy the value from the next node into the current node.<br>
+     * - Example: node=5, node.next=1 → set node.val = 1.<br>
+     * - Now, the current node looks like the next node.<br>
+     * <br>
      *
-     *           <b>Why this works?</b><br>
-     *           - We cannot access the previous node (to adjust its pointer).<br>
-     *           - Instead, we overwrite the target node with the next node's data,
-     *           then delete the next node.<br>
+     * <b>Step 3: Bypass the next node</b><br>
+     * - Set current node’s next pointer to skip over the next node:<br>
+     * node.next = node.next.next.<br>
+     * - This removes the duplicate value (the original next node).<br>
+     * - Example: list [4,5,1,9] becomes [4,1,9].<br>
+     * <br>
      *
-     *           <b>Edge Case:</b><br>
-     *           - Guaranteed that the node to delete is not the tail, so node.next
-     *           will always exist.<br>
+     * <b>Step 4: Edge Case Handling</b><br>
+     * - Guaranteed: node is not the tail → node.next always exists.<br>
+     * - Hence, no null pointer issues.<br>
+     *
+     * <b>Why this works?</b><br>
+     * - By overwriting and skipping, the target node effectively disappears from
+     * the list.<br>
+     * - We simulate deletion without needing the previous node.<br>
      *
      * @param node The node to delete (not the tail node)
-     * @return Nothing (in-place modification)
-     *
-     *         <p>
-     *         <b>Time Complexity:</b> O(1) → Only two operations (copy + skip).<br>
-     *         <b>Space Complexity:</b> O(1) → No extra space used.
      */
     public void deleteNode(ListNode node) {
         node.val = node.next.val; // Copy next node's value
@@ -60,16 +63,14 @@ class Solution {
 
 /**
  * -------------------------------------------------
- * Time and Space Complexity Analysis
+ * Complexity Analysis
  * -------------------------------------------------
  *
- * <b>Approach: Copy and Skip</b><br>
- * - Time Complexity: O(1) → Constant-time operations (copy value + change
- * pointer).<br>
- * - Space Complexity: O(1) → No extra space required.<br>
+ * Approach (Copy and Skip):
+ * - Time Complexity: O(1) → Only two operations (copy + pointer update).
+ * - Space Complexity: O(1) → No extra memory used.
  *
- * <b>Note:</b><br>
- * - This is the only possible solution because we do not have access to the
- * head
- * or the previous node of the target.
+ * Note:
+ * - This is the only valid approach because the head and previous node
+ * are not accessible.
  */

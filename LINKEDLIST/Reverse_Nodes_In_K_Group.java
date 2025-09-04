@@ -41,31 +41,31 @@ class ListNode {
     }
 }
 
-class Solution {
+public class Reverse_Nodes_In_K_Group {
 
     /**
      * -------------------------------------------------
      * Approach 1: ArrayList (Extra Space)
      * -------------------------------------------------
      *
-     * @implNote
-     *           <b>Step 1:</b> Traverse the linked list and collect values in an
-     *           ArrayList.<br>
-     *           Example: [1,2,3,4,5], k=2 → [1,2,3,4,5].<br>
-     *           <br>
+     * 
+     * <b>Step 1:</b> Traverse the linked list and collect values in an
+     * ArrayList.<br>
+     * Example: [1,2,3,4,5], k=2 → [1,2,3,4,5].<br>
+     * <br>
      *
-     *           <b>Step 2:</b> Process ArrayList in chunks of size k.<br>
-     *           - For every k-group, reverse that sublist.<br>
-     *           - Leave the last group as-is if its size < k.<br>
-     *           Example: [1,2,3,4,5], k=2 → [2,1,4,3,5].<br>
-     *           <br>
+     * <b>Step 2:</b> Process ArrayList in chunks of size k.<br>
+     * - For every k-group, reverse that sublist.<br>
+     * - Leave the last group as-is if its size < k.<br>
+     * Example: [1,2,3,4,5], k=2 → [2,1,4,3,5].<br>
+     * <br>
      *
-     *           <b>Step 3:</b> Build a new linked list from the modified
-     *           ArrayList.<br>
-     *           Example: [2,1,4,3,5] → 2 → 1 → 4 → 3 → 5.<br>
-     *           <br>
+     * <b>Step 3:</b> Build a new linked list from the modified
+     * ArrayList.<br>
+     * Example: [2,1,4,3,5] → 2 → 1 → 4 → 3 → 5.<br>
+     * <br>
      *
-     *           <b>Step 4:</b> Return the new head.<br>
+     * <b>Step 4:</b> Return the new head.<br>
      *
      * @param head head of original list
      * @param k    group size
@@ -109,26 +109,26 @@ class Solution {
      * Approach 2: Efficient In-Place (Three-Pointer + Sliding Window)
      * -------------------------------------------------
      *
-     * @implNote
-     *           <b>Step 1:</b> Count total nodes to ensure we have enough to form
-     *           groups of k.<br>
-     *           Example: [1,2,3,4,5], k=3 → length=5 → can only reverse first
-     *           3.<br>
-     *           <br>
      *
-     *           <b>Step 2:</b> Use three pointers to reverse in chunks:<br>
-     *           - prev (marks the node before current k-group)<br>
-     *           - curr (traverses nodes in current group)<br>
-     *           - next (stores curr.next temporarily)<br>
-     *           <br>
+     * <b>Step 1:</b> Count total nodes to ensure we have enough to form
+     * groups of k.<br>
+     * Example: [1,2,3,4,5], k=3 → length=5 → can only reverse first
+     * 3.<br>
+     * <br>
      *
-     *           <b>Step 3:</b> For each group of size k:<br>
-     *           - Reverse pointers within that chunk.<br>
-     *           - Link prev.next to the new head of the reversed group.<br>
-     *           - Move prev to the end of this group.<br>
-     *           <br>
+     * <b>Step 2:</b> Use three pointers to reverse in chunks:<br>
+     * - prev (marks the node before current k-group)<br>
+     * - curr (traverses nodes in current group)<br>
+     * - next (stores curr.next temporarily)<br>
+     * <br>
      *
-     *           <b>Step 4:</b> Continue until fewer than k nodes remain.<br>
+     * <b>Step 3:</b> For each group of size k:<br>
+     * - Reverse pointers within that chunk.<br>
+     * - Link prev.next to the new head of the reversed group.<br>
+     * - Move prev to the end of this group.<br>
+     * <br>
+     *
+     * <b>Step 4:</b> Continue until fewer than k nodes remain.<br>
      *
      * @param head head of original list
      * @param k    group size

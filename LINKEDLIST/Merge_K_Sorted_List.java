@@ -1,78 +1,108 @@
 /**
  * LeetCode 23: Merge k Sorted Lists
  *
- * Problem:
- * You are given an array of k linked-lists, each list is sorted in ascending
- * order.
- * Merge all the linked lists into one sorted linked list and return it.
+ * Problem Description:
+ * You are given an array of k linked lists, where each linked list is sorted
+ * in ascending order. The task is to merge all these k sorted linked lists
+ * into a single sorted linked list and return its head.
  *
  * Example:
  * Input: lists = [[1,4,5],[1,3,4],[2,6]]
  * Output: [1,1,2,3,4,4,5,6]
  *
+ * Constraints:
+ * - The number of linked lists (k) can be large.
+ * - Each list is already sorted individually.
+ * - Goal: Efficiently merge them without flattening into an array.
+ *
  * -------------------------------------------------
  * Approach: Divide and Conquer
  * -------------------------------------------------
- * Step 1: Treat the array of k lists like merge sort.
- * - Repeatedly merge lists in pairs until only one list remains.
- * Step 2: At each level, we merge two lists using the standard "merge two
- * sorted lists" approach.
- * Step 3: Continue dividing and merging until the final single sorted list is
- * formed.
+ * Step 1: Handle Edge Case
+ * - If the array of lists is null or empty → return null immediately.
  *
- * Why Efficient?
- * - Each merge operation handles fewer nodes per step.
- * - Reduces complexity compared to simple O(N log N) sorting or heap-based
- * approach.
+ * Step 2: Divide Lists Recursively
+ * - Use a recursive helper function `mergeLists(lists, left, right)`.
+ * - Base Case: If left == right → only one list, return it directly.
+ * - Recursive Case:
+ * → Find the middle index: mid = (left + right) / 2.
+ * → Recursively merge the left half: mergeLists(lists, left, mid).
+ * → Recursively merge the right half: mergeLists(lists, mid+1, right).
+ * → Merge the two halves using `mergeTwoLists`.
  *
- * Time Complexity: O(N log k), where N = total number of nodes, k = number of
- * lists
- * Space Complexity: O(1), ignoring recursion overhead
+ * Step 3: Merging Two Sorted Lists (mergeTwoLists)
+ * - Create a dummy node to simplify list construction.
+ * - Maintain a pointer `current` starting at dummy.
+ * - Compare the heads of both lists:
+ * → If l1.val <= l2.val, attach l1 to current.next, move l1 forward.
+ * → Else attach l2 to current.next, move l2 forward.
+ * → Move current forward.
+ * - Continue until one of the lists is fully traversed.
+ *
+ * Step 4: Attach Remaining Nodes
+ * - After the loop, if one list still has nodes left,
+ * attach them directly to current.next.
+ *
+ * Step 5: Return Result
+ * - Return dummy.next, which points to the merged sorted list.
+ *
+ * Intuition:
+ * - Works like merge sort: divide into halves, solve recursively,
+ * and merge the results.
+ * - Reduces k lists → log k levels of merging.
+ *
+ * Example Walkthrough:
+ * Input: lists = [[1,4,5],[1,3,4],[2,6]]
+ * - Split into [[1,4,5]] and [[1,3,4],[2,6]]
+ * - Merge right half: [1,3,4] + [2,6] → [1,2,3,4,6]
+ * - Merge left half with result: [1,4,5] + [1,2,3,4,6]
+ * - Final merged list = [1,1,2,3,4,4,5,6]
+ *
+ * -------------------------------------------------
+ * Time and Space Complexity
+ * -------------------------------------------------
+ * Time Complexity: O(N log k)
+ * - N = total number of nodes across all lists
+ * - log k merge levels (like merge sort)
+ * - Each node processed once per merge level
+ *
+ * Space Complexity: O(1) extra (ignoring recursion stack)
+ * - Only uses pointers for merging
+ * - Recursion adds O(log k) stack frames
+ *
+ * Comparison:
+ * - More efficient than flatten + sort (O(N log N))
+ * - Comparable to heap-based O(N log k), but often faster in practice
+ * because merges involve sequential pointer operations.
  */
 
-// Definition for singly-linked list.
-class ListNode {
-    int val;
-    ListNode next;
-
-    ListNode() {
-    }
-
-    ListNode(int val) {
-        this.val = val;
-    }
-
-    ListNode(int val, ListNode next) {
-        this.val = val;
-        this.next = next;
-    }
-}
-
-class Solution {
+public class Merge_K_Sorted_List {
 
     /**
-     * Main function: Merge k sorted linked lists using divide & conquer.
+     * Merges k sorted linked lists using divide and conquer.
      *
-     * @param lists Array of k sorted linked list heads
-     * @return Head of the merged sorted linked list
+     * @param lists Array of sorted linked list heads
+     * @return Head of the fully merged sorted list
      */
     public ListNode mergeKLists(ListNode[] lists) {
-        if (lists == null || lists.length == 0)
+        if (lists == null || lists.length == 0) {
             return null;
+        }
         return mergeLists(lists, 0, lists.length - 1);
     }
 
     /**
-     * Recursively divides the lists array and merges them.
+     * Recursively merges lists within a given range using divide and conquer.
      *
-     * @param lists Array of k sorted linked list heads
-     * @param left  Starting index of current subarray
-     * @param right Ending index of current subarray
-     * @return Head of the merged list for this subarray
+     * @param lists Array of list heads
+     * @param left  Left index of the range
+     * @param right Right index of the range
+     * @return Merged sorted list for this range
      */
     private ListNode mergeLists(ListNode[] lists, int left, int right) {
-        if (left == right)
+        if (left == right) {
             return lists[left];
+        }
         int mid = left + (right - left) / 2;
         ListNode l1 = mergeLists(lists, left, mid);
         ListNode l2 = mergeLists(lists, mid + 1, right);
@@ -80,11 +110,11 @@ class Solution {
     }
 
     /**
-     * Helper function: Merges two sorted linked lists.
+     * Merges two sorted linked lists into one.
      *
-     * @param l1 Head of first sorted linked list
-     * @param l2 Head of second sorted linked list
-     * @return Head of merged sorted linked list
+     * @param l1 Head of first sorted list
+     * @param l2 Head of second sorted list
+     * @return Head of the merged sorted list
      */
     private ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         ListNode dummy = new ListNode(-1);
@@ -101,26 +131,12 @@ class Solution {
             current = current.next;
         }
 
-        if (l1 != null)
+        if (l1 != null) {
             current.next = l1;
-        else
+        } else {
             current.next = l2;
+        }
 
         return dummy.next;
     }
 }
-
-/**
- * -------------------------------------------------
- * Time and Space Complexity Analysis
- * -------------------------------------------------
- * Divide & Conquer Approach:
- * - Time: O(N log k), where N = total number of nodes, k = number of lists
- * (Each node is processed log k times across recursive merges)
- * - Space: O(1) extra (ignoring recursion stack)
- *
- * Comparison:
- * - Much better than simple O(N log N) sorting approach.
- * - More efficient than heap-based O(N log k) in practice, due to fewer heap
- * operations.
- */
