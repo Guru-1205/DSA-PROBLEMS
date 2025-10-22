@@ -15,6 +15,7 @@ class Solution {
             else
             right--;
         }
+        System.out.print(maxArea);
         return maxArea;
     }
 }
